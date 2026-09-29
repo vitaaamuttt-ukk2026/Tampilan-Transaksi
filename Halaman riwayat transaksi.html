@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#006948",
+                        "primary-container": "#00855d",
+                        "primary-fixed": "#85f8c4",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#f5fff7",
+                        "on-primary-fixed-variant": "#005137",
+                        surface: "#faf8ff",
+                        "surface-container": "#eaedff",
+                        "surface-container-low": "#f2f3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e2e7ff",
+                        "on-surface": "#131b2e",
+                        "on-surface-variant": "#3d4a42",
+                        outline: "#6d7a72",
+                        error: "#ba1a1a",
+                        secondary: "#006398",
+                        tertiary: "#006947"
+                    },
+                    fontFamily: {
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "metric-numeral": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+                        "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "metric-numeral": ["32px", { "lineHeight": "36px", "letterSpacing": "-0.03em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { display: none; }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col">
+
+    <!-- Header Compact -->
+    <header class="bg-surface-container-lowest shadow-sm sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold">KP</div>
+                <span class="font-headline-sm text-primary tracking-tight">Kawah Putih Eksplor</span>
+            </div>
+            <a href="#" class="text-sm text-outline hover:text-primary font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">home</span> Beranda
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-3xl mx-auto w-full px-6 py-8">
+        
+        <!-- PROGRESS STEPPER -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between relative">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-surface-container -z-10 rounded-full"></div>
+                <div id="progress-line" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary -z-10 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                
+                <div class="step-indicator flex flex-col items-center gap-2" data-step="1">
+                    <div class="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold shadow-md ring-4 ring-surface transition-all text-sm">1</div>
+                    <span class="text-xs font-bold text-primary bg-surface px-2">Data Diri</span>
+                </div>
+                <div class="step-indicator flex flex-col items-center gap-2" data-step="2">
+                    <div class="w-9 h-9 rounded-full bg-surface-container text-outline flex items-center justify-center font-bold shadow-sm ring-4 ring-surface transition-all text-sm">2</div>
+                    <span class="text-xs font-semibold text-outline bg-surface px-2">Pilih Tiket</span>
+                </div>
+                <div class="step-indicator flex flex-col items-center gap-2" data-step="3">
+                    <div class="w-9 h-9 rounded-full bg-surface-container text-outline flex items-center justify-center font-bold shadow-sm ring-4 ring-surface transition-all text-sm">3</div>
+                    <span class="text-xs font-semibold text-outline bg-surface px-2">Pembayaran</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================================= -->
+        <!-- STEP 1: DATA DIRI (KOSONG / HANYA PLACEHOLDER) -->
+        <!-- ======================================================================= -->
+        <div id="step-1" class="step-content active bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-surface-container">
+            <h2 class="font-headline-md text-on-surface mb-1">Data Identitas Pemesan</h2>
+            <p class="font-body-sm text-on-surface-variant mb-6">E-tiket dan kode QR akses akan dikirimkan ke kontak ini.</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="font-label-md text-on-surface block mb-1.5">Nama Lengkap (Sesuai KTP) <span class="text-error">*</span></label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">badge</span>
+                        <!-- VALUE DIHAPUS, HANYA PLACEHOLDER -->
+                        <input id="input-nama" type="text" class="w-full bg-surface-container-low rounded-xl pl-11 pr-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Masukkan nama lengkap sesuai KTP"/>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-label-md text-on-surface block mb-1.5">Email Aktif <span class="text-error">*</span></label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+                            <!-- VALUE DIHAPUS, HANYA PLACEHOLDER -->
+                            <input id="input-email" type="email" class="w-full bg-surface-container-low rounded-xl pl-11 pr-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="nama@email.com"/>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="font-label-md text-on-surface block mb-1.5">No. WhatsApp <span class="text-error">*</span></label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">chat</span>
+                            <!-- VALUE DIHAPUS, HANYA PLACEHOLDER -->
+                            <input id="input-wa" type="tel" class="w-full bg-surface-container-low rounded-xl pl-11 pr-4 py-3 text-body-md outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="08xxxxxxxxxx"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end">
+                <button onclick="goToStep(2)" class="bg-primary hover:bg-primary-container text-on-primary px-6 py-3 rounded-xl font-headline-sm flex items-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-[0.98]">
+                    Lanjut ke Pilih Tiket <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ======================================================================= -->
+        <!-- STEP 2: PILIH TIKET -->
+        <!-- ======================================================================= -->
+        <div id="step-2" class="step-content bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-surface-container">
+            <h2 class="font-headline-md text-on-surface mb-1">Jadwal & Jumlah Tiket</h2>
+            <p class="font-body-sm text-on-surface-variant mb-6">Pilih tanggal dan sesuaikan jumlah rombongan Anda.</p>
+
+            <!-- Tanggal -->
+            <div class="mb-6">
+                <label class="font-label-md text-on-surface block mb-2">Tanggal Kedatangan</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" onclick="selectPresetDate(0, this)" class="date-card flex flex-col items-center p-3 rounded-xl bg-primary text-on-primary shadow-sm border-2 border-primary transition-all">
+                        <span class="text-xs opacity-90">Hari Ini</span>
+                        <span class="font-headline-sm mt-0.5 date-display-short">25 Okt</span>
+                    </button>
+                    <button type="button" onclick="selectPresetDate(1, this)" class="date-card flex flex-col items-center p-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border-2 border-transparent hover:border-outline/30 transition-all">
+                        <span class="text-xs text-on-surface-variant">Besok</span>
+                        <span class="font-headline-sm mt-0.5 date-display-short">26 Okt</span>
+                    </button>
+                    <label class="date-card cursor-pointer flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border-2 border-transparent hover:border-outline/30 transition-all relative overflow-hidden">
+                        <input type="date" id="custom-date-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleCustomDate(this)">
+                        <span class="material-symbols-outlined text-primary text-xl mb-1 pointer-events-none">calendar_month</span>
+                        <span class="font-label-md text-label-md font-semibold pointer-events-none">Pilih Tanggal</span>
+                        <span id="custom-date-display" class="text-xs text-primary font-bold mt-1 hidden pointer-events-none">-</span>
+                    </label>
+                </div>
+                <input type="hidden" id="final-selected-date" value="">
+            </div>
+
+            <!-- Counter Tiket -->
+            <div class="space-y-3 mb-6">
+                <div class="flex items-center justify-between p-4 bg-surface-container-low/60 rounded-xl">
+                    <div>
+                        <div class="font-headline-sm text-on-surface">Wisatawan Domestik</div>
+                        <div class="text-sm text-primary font-bold">Rp 28.000 <span class="text-outline font-normal">/ orang</span></div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="adjustCount('domestik', -1)" class="w-8 h-8 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+                        <span id="qty-domestik" class="font-headline-sm text-on-surface w-6 text-center">2</span>
+                        <button onclick="adjustCount('domestik', 1)" class="w-8 h-8 rounded-lg bg-primary shadow-sm flex items-center justify-center text-on-primary hover:bg-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined text-[18px]">add</span></button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-surface-container-low/60 rounded-xl">
+                    <div>
+                        <div class="font-headline-sm text-on-surface">Shuttle Ontang-Anting (PP)</div>
+                        <div class="text-sm text-tertiary font-bold">Rp 29.000 <span class="text-outline font-normal">/ orang</span></div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="adjustCount('shuttle', -1)" class="w-8 h-8 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+                        <span id="qty-shuttle" class="font-headline-sm text-on-surface w-6 text-center">2</span>
+                        <button onclick="adjustCount('shuttle', 1)" class="w-8 h-8 rounded-lg bg-primary shadow-sm flex items-center justify-center text-on-primary hover:bg-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined text-[18px]">add</span></button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-surface-container-low/60 rounded-xl">
+                    <div>
+                        <div class="font-headline-sm text-on-surface">Parkir Mobil (Roda 4)</div>
+                        <div class="text-sm text-on-surface font-bold">Rp 15.000 <span class="text-outline font-normal">/ unit</span></div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="adjustCount('parkir', -1)" class="w-8 h-8 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+                        <span id="qty-parkir" class="font-headline-sm text-on-surface w-6 text-center">1</span>
+                        <button onclick="adjustCount('parkir', 1)" class="w-8 h-8 rounded-lg bg-primary shadow-sm flex items-center justify-center text-on-primary hover:bg-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined text-[18px]">add</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t border-surface-container">
+                <button onclick="goToStep(1)" class="text-outline hover:text-on-surface font-semibold px-4 py-2.5 flex items-center gap-1.5 transition-colors rounded-lg hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span> Kembali
+                </button>
+                <button onclick="goToStep(3)" class="bg-primary hover:bg-primary-container text-on-primary px-6 py-3 rounded-xl font-headline-sm flex items-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-[0.98]">
+                    Lanjut ke Pembayaran <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ======================================================================= -->
+        <!-- STEP 3: PEMBAYARAN -->
+        <!-- ======================================================================= -->
+        <div id="step-3" class="step-content bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-surface-container">
+            <h2 class="font-headline-md text-on-surface mb-1">Konfirmasi & Pembayaran</h2>
+            <p class="font-body-sm text-on-surface-variant mb-6">Periksa kembali ringkasan pesanan Anda sebelum membayar.</p>
+
+            <div class="bg-surface-container-low/50 rounded-xl p-4 mb-6 space-y-2.5">
+                <div class="flex justify-between text-sm">
+                    <span class="text-on-surface-variant">Tanggal Kunjungan</span>
+                    <span id="summary-date" class="font-semibold text-primary">-</span>
+                </div>
+                <div class="border-t border-outline/10 my-1"></div>
+                <div class="flex justify-between text-sm">
+                    <span id="summary-domestik" class="text-on-surface-variant">2x Tiket Domestik</span>
+                    <span id="total-domestik" class="font-semibold text-on-surface">Rp 56.000</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span id="summary-shuttle" class="text-on-surface-variant">2x Shuttle Ontang-Anting</span>
+                    <span id="total-shuttle" class="font-semibold text-on-surface">Rp 58.000</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span id="summary-parkir" class="text-on-surface-variant">1x Parkir Mobil</span>
+                    <span id="total-parkir" class="font-semibold text-on-surface">Rp 15.000</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-on-surface-variant">Biaya Layanan Digital</span>
+                    <span class="font-semibold text-on-surface">Rp 2.000</span>
+                </div>
+                <div class="border-t border-outline/20 my-2"></div>
+                <div class="flex justify-between items-center">
+                    <span class="font-headline-sm text-on-surface">Total Tagihan</span>
+                    <span id="grand-total" class="font-metric-numeral text-primary">Rp 131.000</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <label class="cursor-pointer relative flex items-center gap-4 p-4 rounded-xl border-2 border-primary bg-primary/5 transition-all">
+                    <input type="radio" name="payment" checked class="w-5 h-5 accent-primary">
+                    <div class="flex-1">
+                        <div class="font-headline-sm text-on-surface">QRIS Instan</div>
+                        <div class="text-xs text-on-surface-variant">BCA, GoPay, OVO, DANA, ShopeePay</div>
+                    </div>
+                    <span class="material-symbols-outlined text-primary">check_circle</span>
+                </label>
+                <label class="cursor-pointer relative flex items-center gap-4 p-4 rounded-xl border border-outline/20 hover:bg-surface-container-low transition-all">
+                    <input type="radio" name="payment" class="w-5 h-5 accent-primary">
+                    <div class="flex-1">
+                        <div class="font-headline-sm text-on-surface">Virtual Account</div>
+                        <div class="text-xs text-on-surface-variant">Transfer Bank BCA / Mandiri / BRI</div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t border-surface-container">
+                <button onclick="goToStep(2)" class="text-outline hover:text-on-surface font-semibold px-4 py-2.5 flex items-center gap-1.5 transition-colors rounded-lg hover:bg-surface-container">
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span> Kembali
+                </button>
+                <button id="btn-pay" onclick="processPayment()" class="bg-primary hover:bg-primary-container text-on-primary px-6 py-3 rounded-xl font-headline-sm flex items-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-[0.98]">
+                    <span id="btn-pay-text">Bayar Sekarang • Rp 131.000</span>
+                    <span id="btn-pay-icon" class="material-symbols-outlined">lock</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ======================================================================= -->
+        <!-- STEP 4: E-TICKET SUKSES -->
+        <!-- ======================================================================= -->
+        <div id="step-success" class="step-content bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-surface-container text-center">
+            <div class="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h2 class="font-headline-lg text-on-surface mb-2">Pembayaran Berhasil!</h2>
+            <p class="font-body-md text-on-surface-variant mb-6">E-Tiket Anda telah diterbitkan. Tunjukkan QR Code ini di gerbang masuk.</p>
+
+            <div class="bg-surface-container-low rounded-2xl p-5 mb-6 text-left border border-dashed border-outline/40">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <div class="font-headline-sm text-on-surface font-bold">Kawah Putih Ciwidey</div>
+                        <div class="text-xs text-outline uppercase tracking-wider">E-PASS REGULER</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-outline uppercase">Kode Booking</div>
+                        <div class="font-mono font-bold text-primary">#KP-8849</div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+                    <div>
+                        <div class="text-xs text-outline uppercase font-bold">Nama</div>
+                        <div id="ticket-nama" class="font-semibold text-on-surface">-</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-outline uppercase font-bold">Tanggal</div>
+                        <div id="ticket-date" class="font-semibold text-on-surface">-</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center py-4 bg-white rounded-xl border border-outline/10">
+                    <svg class="w-36 h-36" fill="none" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                        <rect height="36" rx="4" stroke="#006948" stroke-width="6" width="36" x="10" y="10"></rect>
+                        <rect fill="#006948" height="16" rx="2" width="16" x="20" y="20"></rect>
+                        <rect height="36" rx="4" stroke="#006948" stroke-width="6" width="36" x="94" y="10"></rect>
+                        <rect fill="#006948" height="16" rx="2" width="16" x="104" y="20"></rect>
+                        <rect height="36" rx="4" stroke="#006948" stroke-width="6" width="36" x="10" y="94"></rect>
+                        <rect fill="#006948" height="16" rx="2" width="16" x="20" y="104"></rect>
+                        <rect fill="#131b2e" height="8" rx="1.5" width="8" x="56" y="14"></rect>
+                        <rect fill="#131b2e" height="8" rx="1.5" width="8" x="72" y="14"></rect>
+                        <rect fill="#006948" height="8" rx="1.5" width="8" x="56" y="28"></rect>
+                        <rect fill="#131b2e" height="12" rx="1.5" width="8" x="14" y="56"></rect>
+                        <rect fill="#006948" height="10" rx="2" width="10" x="52" y="52"></rect>
+                        <rect fill="#131b2e" height="8" rx="1.5" width="16" x="70" y="52"></rect>
+                        <rect fill="#131b2e" height="16" rx="1.5" width="8" x="52" y="70"></rect>
+                        <rect fill="#006948" height="12" rx="1.5" width="12" x="68" y="72"></rect>
+                        <rect fill="#131b2e" height="10" rx="1.5" width="10" x="56" y="96"></rect>
+                        <rect fill="#006948" height="8" rx="1.5" width="14" x="74" y="96"></rect>
+                        <rect fill="#006948" height="8" rx="1.5" width="16" x="56" y="114"></rect>
+                    </svg>
+                    <p class="text-[11px] text-outline mt-2 font-semibold">Scan di Gate Masuk</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button class="bg-surface-container text-on-surface px-5 py-3 rounded-xl font-headline-sm flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all">
+                    <span class="material-symbols-outlined text-[20px]">download</span> Unduh PDF
+                </button>
+                <button onclick="resetForm()" class="bg-primary text-on-primary px-5 py-3 rounded-xl font-headline-sm flex items-center justify-center gap-2 hover:bg-primary-container shadow-md transition-all">
+                    <span class="material-symbols-outlined text-[20px]">home</span> Kembali ke Beranda
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        let currentStep = 1;
+
+        // ==========================================
+        // LOGIC DATE PICKER
+        // ==========================================
+        function selectPresetDate(daysToAdd, btnElement) {
+            const date = new Date();
+            date.setDate(date.getDate() + daysToAdd);
+            
+            const shortOptions = { day: 'numeric', month: 'short' };
+            const formattedShort = date.toLocaleDateString('id-ID', shortOptions);
+            
+            const fullOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedFull = date.toLocaleDateString('id-ID', fullOptions);
+
+            document.getElementById('final-selected-date').value = formattedFull;
+
+            document.querySelectorAll('.date-card').forEach(card => {
+                card.className = "date-card flex flex-col items-center p-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border-2 border-transparent hover:border-outline/30 transition-all";
+            });
+
+            btnElement.className = "date-card flex flex-col items-center p-3 rounded-xl bg-primary text-on-primary shadow-sm border-2 border-primary transition-all";
+            btnElement.querySelector('.date-display-short').innerText = formattedShort;
+
+            document.getElementById('custom-date-input').value = '';
+            document.getElementById('custom-date-display').classList.add('hidden');
+        }
+
+        function handleCustomDate(inputElement) {
+            if (!inputElement.value) return;
+            const date = new Date(inputElement.value + 'T12:00:00'); 
+            
+            const fullOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedFull = date.toLocaleDateString('id-ID', fullOptions);
+            
+            const shortOptions = { day: 'numeric', month: 'short' };
+            const formattedShort = date.toLocaleDateString('id-ID', shortOptions);
+
+            document.getElementById('final-selected-date').value = formattedFull;
+
+            document.querySelectorAll('.date-card').forEach(card => {
+                card.className = "date-card flex flex-col items-center p-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface border-2 border-transparent hover:border-outline/30 transition-all";
+            });
+
+            const customLabel = inputElement.parentElement;
+            customLabel.className = "date-card cursor-pointer flex flex-col items-center justify-center p-3 rounded-xl bg-primary text-on-primary shadow-sm border-2 border-primary transition-all relative overflow-hidden";
+            
+            const displaySpan = document.getElementById('custom-date-display');
+            displaySpan.innerText = formattedShort;
+            displaySpan.classList.remove('hidden');
+        }
+
+        // ==========================================
+        // LOGIC NAVIGASI STEP
+        // ==========================================
+        function goToStep(targetStep) {
+            if (currentStep === 1 && targetStep === 2) {
+                const nama = document.getElementById('input-nama').value.trim();
+                if (!nama) {
+                    alert("Mohon isi Nama Lengkap terlebih dahulu.");
+                    document.getElementById('input-nama').focus();
+                    return;
+                }
+            }
+
+            document.getElementById('step-' + currentStep).classList.remove('active');
+            document.getElementById('step-' + targetStep).classList.add('active');
+            
+            currentStep = targetStep;
+            updateStepperUI();
+            
+            if (targetStep === 3) {
+                updateTotal(); 
+                updateDateSummary(); 
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateStepperUI() {
+            const progressLine = document.getElementById('progress-line');
+            if (currentStep === 1) progressLine.style.width = '0%';
+            if (currentStep === 2) progressLine.style.width = '50%';
+            if (currentStep === 3) progressLine.style.width = '100%';
+
+            document.querySelectorAll('.step-indicator').forEach(indicator => {
+                const stepNum = parseInt(indicator.getAttribute('data-step'));
+                const circle = indicator.querySelector('div');
+                const text = indicator.querySelector('span');
+
+                if (stepNum === currentStep) {
+                    circle.className = "w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold shadow-md ring-4 ring-surface transition-all text-sm";
+                    circle.innerText = stepNum;
+                    text.className = "text-xs font-bold text-primary bg-surface px-2";
+                } else if (stepNum < currentStep) {
+                    circle.className = "w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold shadow-sm ring-4 ring-surface transition-all text-sm";
+                    circle.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span>';
+                    text.className = "text-xs font-bold text-primary bg-surface px-2";
+                } else {
+                    circle.className = "w-9 h-9 rounded-full bg-surface-container text-outline flex items-center justify-center font-bold shadow-sm ring-4 ring-surface transition-all text-sm";
+                    circle.innerText = stepNum;
+                    text.className = "text-xs font-semibold text-outline bg-surface px-2";
+                }
+            });
+        }
+
+        // ==========================================
+        // LOGIC HARGA & SUMMARY
+        // ==========================================
+        window.adjustCount = function(type, delta) {
+            const el = document.getElementById('qty-' + type);
+            if (!el) return;
+            let currentVal = parseInt(el.textContent, 10) || 0;
+            let newVal = currentVal + delta;
+            
+            if (newVal < 0) newVal = 0;
+            if (type === 'domestik' && newVal < 1) newVal = 1;
+            
+            el.textContent = newVal;
+        };
+
+        function updateTotal() {
+            const qDomestik = parseInt(document.getElementById('qty-domestik').innerText) || 0;
+            const qShuttle = parseInt(document.getElementById('qty-shuttle').innerText) || 0;
+            const qParkir = parseInt(document.getElementById('qty-parkir').innerText) || 0;
+
+            const totalDomestik = qDomestik * 28000;
+            const totalShuttle = qShuttle * 29000;
+            const totalParkir = qParkir * 15000;
+            const adminFee = 2000;
+            const grandTotal = totalDomestik + totalShuttle + totalParkir + adminFee;
+
+            const fmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+
+            document.getElementById('summary-domestik').innerText = `${qDomestik}x Tiket Domestik`;
+            document.getElementById('total-domestik').innerText = fmt.format(totalDomestik);
+            
+            document.getElementById('summary-shuttle').innerText = `${qShuttle}x Shuttle Ontang-Anting`;
+            document.getElementById('total-shuttle').innerText = fmt.format(totalShuttle);
+            
+            document.getElementById('summary-parkir').innerText = `${qParkir}x Parkir Mobil`;
+            document.getElementById('total-parkir').innerText = fmt.format(totalParkir);
+
+            document.getElementById('grand-total').innerText = fmt.format(grandTotal);
+            document.getElementById('btn-pay-text').innerText = `Bayar Sekarang • ${fmt.format(grandTotal)}`;
+        }
+
+        function updateDateSummary() {
+            const selectedDate = document.getElementById('final-selected-date').value || "Belum dipilih";
+            document.getElementById('summary-date').innerText = selectedDate;
+            document.getElementById('ticket-date').innerText = selectedDate;
+        }
+
+        // ==========================================
+        // LOGIC PEMBAYARAN & RESET
+        // ==========================================
+        function processPayment() {
+            const btn = document.getElementById('btn-pay');
+            const originalText = document.getElementById('btn-pay-text').innerText;
+            
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            document.getElementById('btn-pay-text').innerText = "Memproses...";
+            document.getElementById('btn-pay-icon').className = "material-symbols-outlined animate-spin";
+
+            setTimeout(() => {
+                const namaInput = document.getElementById('input-nama').value.trim();
+                document.getElementById('ticket-nama').innerText = namaInput || "Pengunjung";
+                updateDateSummary(); 
+                
+                document.getElementById('step-3').classList.remove('active');
+                document.getElementById('step-success').classList.add('active');
+                
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                document.getElementById('btn-pay-text').innerText = originalText;
+                document.getElementById('btn-pay-icon').className = "material-symbols-outlined";
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1500);
+        }
+
+        function resetForm() {
+            currentStep = 1;
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-1').classList.add('active');
+            
+            // Reset form inputs to empty
+            document.getElementById('input-nama').value = '';
+            document.getElementById('input-email').value = '';
+            document.getElementById('input-wa').value = '';
+            
+            document.getElementById('qty-domestik').innerText = "2";
+            document.getElementById('qty-shuttle').innerText = "2";
+            document.getElementById('qty-parkir').innerText = "1";
+            
+            const todayBtn = document.querySelectorAll('.date-card')[0];
+            selectPresetDate(0, todayBtn);
+            
+            updateStepperUI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Inisialisasi awal
+        window.onload = function() {
+            const todayBtn = document.querySelectorAll('.date-card')[0];
+            selectPresetDate(0, todayBtn);
+            updateTotal();
+        };
+    </script>
+</body>
+</html>
